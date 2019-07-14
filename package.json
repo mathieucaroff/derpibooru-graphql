@@ -16,21 +16,10 @@
         "tslint": "tslint --config tslint.yml --project tsconfig.tslint.json",
         "tslint:fix": "tslint --config tslint.yml --project tsconfig.tslint.json --fix"
     },
-    "dependencies": {
-        "ajv": "^6.10.0",
-        "apollo-server": "^2.6.1",
-        "graphql": "^14.3.1",
-        "js-yaml": "^3.13.1",
-        "lodash": "^4.17.11",
-        "node-fetch": "^2.6.0",
-        "ono": "^5.0.1"
-    },
+    "dependencies": {},
     "devDependencies": {
-        "@types/graphql": "^14.2.0",
         "@types/jest": "^24.0.13",
         "@types/js-yaml": "^3.12.1",
-        "@types/lodash": "^4.14.134",
-        "@types/node-fetch": "^2.3.5",
         "@typescript-eslint/eslint-plugin": "^1.10.2",
         "@typescript-eslint/parser": "^1.10.2",
         "eslint": "^5.16.0",
