@@ -1,0 +1,1558 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "definitions": {
+    "ArgumentNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "Argument"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        },
+        "value": {
+          "$ref": "#/definitions/ValueNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "value"
+      ],
+      "type": "object"
+    },
+    "BooleanValueNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "BooleanValue"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "value": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "type": "object"
+    },
+    "DefinitionNode": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ExecutableDefinitionNode"
+        },
+        {
+          "$ref": "#/definitions/TypeSystemDefinitionNode"
+        },
+        {
+          "$ref": "#/definitions/TypeSystemExtensionNode"
+        }
+      ]
+    },
+    "DirectiveDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "arguments": {
+          "items": {
+            "$ref": "#/definitions/InputValueDefinitionNode"
+          },
+          "type": "array"
+        },
+        "description": {
+          "$ref": "#/definitions/StringValueNode"
+        },
+        "kind": {
+          "enum": [
+            "DirectiveDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "locations": {
+          "items": {
+            "$ref": "#/definitions/NameNode"
+          },
+          "type": "array"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "locations"
+      ],
+      "type": "object"
+    },
+    "DirectiveNode": {
+      "additionalProperties": false,
+      "properties": {
+        "arguments": {
+          "items": {
+            "$ref": "#/definitions/ArgumentNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "Directive"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "EnumTypeDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "$ref": "#/definitions/StringValueNode"
+        },
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "EnumTypeDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        },
+        "values": {
+          "items": {
+            "$ref": "#/definitions/EnumValueDefinitionNode"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "EnumTypeExtensionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "EnumTypeExtension"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        },
+        "values": {
+          "items": {
+            "$ref": "#/definitions/EnumValueDefinitionNode"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "EnumValueDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "$ref": "#/definitions/StringValueNode"
+        },
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "EnumValueDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "EnumValueNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "EnumValue"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "type": "object"
+    },
+    "ExecutableDefinitionNode": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/OperationDefinitionNode"
+        },
+        {
+          "$ref": "#/definitions/FragmentDefinitionNode"
+        }
+      ]
+    },
+    "FieldDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "arguments": {
+          "items": {
+            "$ref": "#/definitions/InputValueDefinitionNode"
+          },
+          "type": "array"
+        },
+        "description": {
+          "$ref": "#/definitions/StringValueNode"
+        },
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "FieldDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        },
+        "type": {
+          "$ref": "#/definitions/TypeNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "type"
+      ],
+      "type": "object"
+    },
+    "FieldNode": {
+      "additionalProperties": false,
+      "properties": {
+        "alias": {
+          "$ref": "#/definitions/NameNode"
+        },
+        "arguments": {
+          "items": {
+            "$ref": "#/definitions/ArgumentNode"
+          },
+          "type": "array"
+        },
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "Field"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        },
+        "selectionSet": {
+          "$ref": "#/definitions/SelectionSetNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "FloatValueNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "FloatValue"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "type": "object"
+    },
+    "FragmentDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "FragmentDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        },
+        "selectionSet": {
+          "$ref": "#/definitions/SelectionSetNode"
+        },
+        "typeCondition": {
+          "$ref": "#/definitions/NamedTypeNode"
+        },
+        "variableDefinitions": {
+          "items": {
+            "$ref": "#/definitions/VariableDefinitionNode"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "typeCondition",
+        "selectionSet"
+      ],
+      "type": "object"
+    },
+    "FragmentSpreadNode": {
+      "additionalProperties": false,
+      "properties": {
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "FragmentSpread"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "InlineFragmentNode": {
+      "additionalProperties": false,
+      "properties": {
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "InlineFragment"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "selectionSet": {
+          "$ref": "#/definitions/SelectionSetNode"
+        },
+        "typeCondition": {
+          "$ref": "#/definitions/NamedTypeNode"
+        }
+      },
+      "required": [
+        "kind",
+        "selectionSet"
+      ],
+      "type": "object"
+    },
+    "InputObjectTypeDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "$ref": "#/definitions/StringValueNode"
+        },
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/definitions/InputValueDefinitionNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "InputObjectTypeDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "InputObjectTypeExtensionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/definitions/InputValueDefinitionNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "InputObjectTypeExtension"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "InputValueDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "defaultValue": {
+          "$ref": "#/definitions/ValueNode"
+        },
+        "description": {
+          "$ref": "#/definitions/StringValueNode"
+        },
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "InputValueDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        },
+        "type": {
+          "$ref": "#/definitions/TypeNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "type"
+      ],
+      "type": "object"
+    },
+    "IntValueNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "IntValue"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "type": "object"
+    },
+    "InterfaceTypeDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "$ref": "#/definitions/StringValueNode"
+        },
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/definitions/FieldDefinitionNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "InterfaceTypeDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "InterfaceTypeExtensionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/definitions/FieldDefinitionNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "InterfaceTypeExtension"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "ListTypeNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "ListType"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "type": {
+          "$ref": "#/definitions/TypeNode"
+        }
+      },
+      "required": [
+        "kind",
+        "type"
+      ],
+      "type": "object"
+    },
+    "ListValueNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "ListValue"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "values": {
+          "items": {
+            "$ref": "#/definitions/ValueNode"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "values"
+      ],
+      "type": "object"
+    },
+    "Location": {
+      "additionalProperties": false,
+      "description": "Contains a range of UTF-8 character offsets and token references that\nidentify the region of the source from which the AST derived.",
+      "properties": {
+        "end": {
+          "description": "The character offset at which this Node ends.",
+          "type": "number"
+        },
+        "endToken": {
+          "$ref": "#/definitions/Token",
+          "description": "The Token at which this Node ends."
+        },
+        "start": {
+          "description": "The character offset at which this Node begins.",
+          "type": "number"
+        },
+        "startToken": {
+          "$ref": "#/definitions/Token",
+          "description": "The Token at which this Node begins."
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "startToken",
+        "endToken"
+      ],
+      "type": "object"
+    },
+    "NameNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "Name"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "type": "object"
+    },
+    "NamedTypeNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "NamedType"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "NonNullTypeNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "NonNullType"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/NamedTypeNode"
+            },
+            {
+              "$ref": "#/definitions/ListTypeNode"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "type"
+      ],
+      "type": "object"
+    },
+    "NullValueNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "NullValue"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "type": "object"
+    },
+    "ObjectFieldNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "ObjectField"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        },
+        "value": {
+          "$ref": "#/definitions/ValueNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "value"
+      ],
+      "type": "object"
+    },
+    "ObjectTypeDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "$ref": "#/definitions/StringValueNode"
+        },
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/definitions/FieldDefinitionNode"
+          },
+          "type": "array"
+        },
+        "interfaces": {
+          "items": {
+            "$ref": "#/definitions/NamedTypeNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "ObjectTypeDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "ObjectTypeExtensionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/definitions/FieldDefinitionNode"
+          },
+          "type": "array"
+        },
+        "interfaces": {
+          "items": {
+            "$ref": "#/definitions/NamedTypeNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "ObjectTypeExtension"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "ObjectValueNode": {
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "items": {
+            "$ref": "#/definitions/ObjectFieldNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "ObjectValue"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        }
+      },
+      "required": [
+        "kind",
+        "fields"
+      ],
+      "type": "object"
+    },
+    "OperationDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "OperationDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        },
+        "operation": {
+          "$ref": "#/definitions/OperationTypeNode"
+        },
+        "selectionSet": {
+          "$ref": "#/definitions/SelectionSetNode"
+        },
+        "variableDefinitions": {
+          "items": {
+            "$ref": "#/definitions/VariableDefinitionNode"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "operation",
+        "selectionSet"
+      ],
+      "type": "object"
+    },
+    "OperationTypeDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "OperationTypeDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "operation": {
+          "$ref": "#/definitions/OperationTypeNode"
+        },
+        "type": {
+          "$ref": "#/definitions/NamedTypeNode"
+        }
+      },
+      "required": [
+        "kind",
+        "operation",
+        "type"
+      ],
+      "type": "object"
+    },
+    "OperationTypeNode": {
+      "enum": [
+        "query",
+        "mutation",
+        "subscription"
+      ],
+      "type": "string"
+    },
+    "ScalarTypeDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "$ref": "#/definitions/StringValueNode"
+        },
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "ScalarTypeDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "ScalarTypeExtensionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "ScalarTypeExtension"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "SchemaDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "SchemaDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "operationTypes": {
+          "items": {
+            "$ref": "#/definitions/OperationTypeDefinitionNode"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "operationTypes"
+      ],
+      "type": "object"
+    },
+    "SchemaExtensionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "SchemaExtension"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "operationTypes": {
+          "items": {
+            "$ref": "#/definitions/OperationTypeDefinitionNode"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "type": "object"
+    },
+    "SelectionNode": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/FieldNode"
+        },
+        {
+          "$ref": "#/definitions/FragmentSpreadNode"
+        },
+        {
+          "$ref": "#/definitions/InlineFragmentNode"
+        }
+      ]
+    },
+    "SelectionSetNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "SelectionSet"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "selections": {
+          "items": {
+            "$ref": "#/definitions/SelectionNode"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "selections"
+      ],
+      "type": "object"
+    },
+    "StringValueNode": {
+      "additionalProperties": false,
+      "properties": {
+        "block": {
+          "type": "boolean"
+        },
+        "kind": {
+          "enum": [
+            "StringValue"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "type": "object"
+    },
+    "Token": {
+      "additionalProperties": false,
+      "description": "Represents a range of characters represented by a lexical token\nwithin a Source.",
+      "properties": {
+        "column": {
+          "description": "The 1-indexed column number at which this Token begins.",
+          "type": "number"
+        },
+        "end": {
+          "description": "The character offset at which this Node ends.",
+          "type": "number"
+        },
+        "line": {
+          "description": "The 1-indexed line number on which this Token appears.",
+          "type": "number"
+        },
+        "next": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Token"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "prev": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Token"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Tokens exist as nodes in a double-linked-list amongst all tokens\nincluding ignored tokens. <SOF> is always the first node and <EOF>\nthe last."
+        },
+        "start": {
+          "description": "The kind of Token. \n The character offset at which this Node begins.",
+          "type": "number"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "not": {
+              }
+            }
+          ],
+          "description": "For non-punctuation tokens, represents the interpreted value of the token."
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "line",
+        "column",
+        "value",
+        "prev",
+        "next"
+      ],
+      "type": "object"
+    },
+    "TypeDefinitionNode": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ScalarTypeDefinitionNode"
+        },
+        {
+          "$ref": "#/definitions/ObjectTypeDefinitionNode"
+        },
+        {
+          "$ref": "#/definitions/InterfaceTypeDefinitionNode"
+        },
+        {
+          "$ref": "#/definitions/UnionTypeDefinitionNode"
+        },
+        {
+          "$ref": "#/definitions/EnumTypeDefinitionNode"
+        },
+        {
+          "$ref": "#/definitions/InputObjectTypeDefinitionNode"
+        }
+      ]
+    },
+    "TypeExtensionNode": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ScalarTypeExtensionNode"
+        },
+        {
+          "$ref": "#/definitions/ObjectTypeExtensionNode"
+        },
+        {
+          "$ref": "#/definitions/InterfaceTypeExtensionNode"
+        },
+        {
+          "$ref": "#/definitions/UnionTypeExtensionNode"
+        },
+        {
+          "$ref": "#/definitions/EnumTypeExtensionNode"
+        },
+        {
+          "$ref": "#/definitions/InputObjectTypeExtensionNode"
+        }
+      ]
+    },
+    "TypeNode": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/NamedTypeNode"
+        },
+        {
+          "$ref": "#/definitions/ListTypeNode"
+        },
+        {
+          "$ref": "#/definitions/NonNullTypeNode"
+        }
+      ]
+    },
+    "TypeSystemDefinitionNode": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SchemaDefinitionNode"
+        },
+        {
+          "$ref": "#/definitions/TypeDefinitionNode"
+        },
+        {
+          "$ref": "#/definitions/DirectiveDefinitionNode"
+        }
+      ]
+    },
+    "TypeSystemExtensionNode": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SchemaExtensionNode"
+        },
+        {
+          "$ref": "#/definitions/TypeExtensionNode"
+        }
+      ]
+    },
+    "UnionTypeDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "$ref": "#/definitions/StringValueNode"
+        },
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "UnionTypeDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        },
+        "types": {
+          "items": {
+            "$ref": "#/definitions/NamedTypeNode"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "UnionTypeExtensionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "UnionTypeExtension"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        },
+        "types": {
+          "items": {
+            "$ref": "#/definitions/NamedTypeNode"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    },
+    "ValueNode": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/VariableNode"
+        },
+        {
+          "$ref": "#/definitions/IntValueNode"
+        },
+        {
+          "$ref": "#/definitions/FloatValueNode"
+        },
+        {
+          "$ref": "#/definitions/StringValueNode"
+        },
+        {
+          "$ref": "#/definitions/BooleanValueNode"
+        },
+        {
+          "$ref": "#/definitions/NullValueNode"
+        },
+        {
+          "$ref": "#/definitions/EnumValueNode"
+        },
+        {
+          "$ref": "#/definitions/ListValueNode"
+        },
+        {
+          "$ref": "#/definitions/ObjectValueNode"
+        }
+      ]
+    },
+    "VariableDefinitionNode": {
+      "additionalProperties": false,
+      "properties": {
+        "defaultValue": {
+          "$ref": "#/definitions/ValueNode"
+        },
+        "directives": {
+          "items": {
+            "$ref": "#/definitions/DirectiveNode"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "VariableDefinition"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "type": {
+          "$ref": "#/definitions/TypeNode"
+        },
+        "variable": {
+          "$ref": "#/definitions/VariableNode"
+        }
+      },
+      "required": [
+        "kind",
+        "variable",
+        "type"
+      ],
+      "type": "object"
+    },
+    "VariableNode": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "Variable"
+          ],
+          "type": "string"
+        },
+        "loc": {
+          "$ref": "#/definitions/Location"
+        },
+        "name": {
+          "$ref": "#/definitions/NameNode"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "type": "object"
+    }
+  },
+  "properties": {
+    "definitions": {
+      "items": {
+        "$ref": "#/definitions/DefinitionNode"
+      },
+      "type": "array"
+    },
+    "kind": {
+      "enum": [
+        "Document"
+      ],
+      "type": "string"
+    },
+    "loc": {
+      "$ref": "#/definitions/Location"
+    }
+  },
+  "required": [
+    "kind",
+    "definitions"
+  ],
+  "type": "object"
+}

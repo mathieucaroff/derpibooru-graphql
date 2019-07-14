@@ -1,0 +1,46 @@
+{
+    "name": "sgq",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scripts": {
+        "compile": "tsc",
+        "compile:watch": "tsc --watch",
+        "serve": "node --inspect ./.build/src/index.js",
+        "serve:watch": "nodemon --inspect ./.build/src/index.js",
+        "test": "jest --forceExit --detectOpenHandles --verbose",
+        "test:coverage": "cross-env NODE_ENV=test jest --forceExit --coverage --verbose",
+        "test:watch": "cross-env NODE_ENV=test jest --verbose --watch",
+        "test-e2e": "cross-env TEST_TYPE=e2e NODE_ENV=test jest --forceExit --detectOpenHandles --verbose",
+        "test-e2e:watch": "cross-env TEST_TYPE=e2e NODE_ENV=test jest --verbose --watch",
+        "test-all": "cross-env TEST_TYPE=all NODE_ENV=test jest --forceExit --detectOpenHandles --verbose",
+        "tslint": "tslint --config tslint.yml --project tsconfig.tslint.json",
+        "tslint:fix": "tslint --config tslint.yml --project tsconfig.tslint.json --fix"
+    },
+    "dependencies": {
+        "ajv": "^6.10.0",
+        "apollo-server": "^2.6.1",
+        "graphql": "^14.3.1",
+        "js-yaml": "^3.13.1",
+        "lodash": "^4.17.11",
+        "node-fetch": "^2.6.0",
+        "ono": "^5.0.1"
+    },
+    "devDependencies": {
+        "@types/graphql": "^14.2.0",
+        "@types/jest": "^24.0.13",
+        "@types/js-yaml": "^3.12.1",
+        "@types/lodash": "^4.14.134",
+        "@types/node-fetch": "^2.3.5",
+        "@typescript-eslint/eslint-plugin": "^1.10.2",
+        "@typescript-eslint/parser": "^1.10.2",
+        "eslint": "^5.16.0",
+        "eslint-config-prettier": "^4.3.0",
+        "eslint-plugin-prettier": "^3.1.0",
+        "jest": "^24.8.0",
+        "nodemon": "^1.19.1",
+        "prettier": "^1.18.2",
+        "source-map-support": "^0.5.12",
+        "typescript": "^3.5.1",
+        "typescript-to-json-schema": "^0.6.0"
+    }
+}
