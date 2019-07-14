@@ -16,7 +16,10 @@
         "tslint": "tslint --config tslint.yml --project tsconfig.tslint.json",
         "tslint:fix": "tslint --config tslint.yml --project tsconfig.tslint.json --fix"
     },
-    "dependencies": {},
+    "dependencies": {
+        "graphql": "^14.4.2",
+        "graphql-tag": "^2.10.1"
+    },
     "devDependencies": {
         "@types/jest": "^24.0.13",
         "@types/js-yaml": "^3.12.1",

@@ -1,40 +1,16 @@
-# Deskpro GraphQL API
+# Derpibooru GraphQL API
 
 Built on top of the Rest API
+
+## WIP
+
+I have some problems with the main dependency: graphql-rest-proxy
+I'm thinking of forking it to reshape the code.
 
 ## Getting started
 
 ```bash
 yarn install
-mkdir -p tmp
-curl 'PATH_TO_DUMP_FILE.json' > tmp/dp.api.yml
-yarn compile
-yarn serve
+cd src
+yarn graphql-rest-proxy -c proxy.config.js schema.gql
 ```
-
-## Test request
-
-Filters now work.
-
-```gql
-{
-    AB: people_get(count: 4, organization: "15,36,54") {
-        id
-        organization {
-            id
-        }
-    }
-    B: people_get(count: 2, page: 2, organization: "15,36,54") {
-        id
-        organization {
-            id
-        }
-    }
-}
-```
-
-## Unordered list of steps to convert the dump into graphQL AST and resolver
-
--   (Parse the JSON content)
--   Flattening the dump and adding default values where possible
--   ... todo
