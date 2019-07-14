@@ -1,11 +1,11 @@
 type Query {
-    image(id: ID): Image @proxy(get: "/:id.json")
-    user(name: ID): User @proxy(get: "/profiles/:name.json")
+    image(id: ID): Image @proxy(get: "/$id.json")
+    user(name: ID): User @proxy(get: "/profiles/$name.json")
     search(
         query: String!
         sort: SortFieldInput = created_at
         order: SortOrderInput = desc
-    ): SearchPage! @proxy(get: "/search?q=:query&sf=:sort&sd=:sort_order")
+    ): SearchPage! @proxy(get: "/search?q=$query&sf=$sort&sd=$sort_order")
 }
 
 scalar CommaSpaceSeparatedString
@@ -76,7 +76,7 @@ type Image {
     updated_at: Date!
     uploader_id: Int
     uploader: String
-    uploader_info: User @proxy(get: "/profiles/:uploader.json")
+    uploader_info: User @proxy(get: "/profiles/$uploader.json")
     upvotes: Int!
     width: Int!
 }
@@ -84,10 +84,10 @@ type Image {
 type Interaction {
     id: ID
     image_id: ID
-    image: Image @proxy(get: "/:image_id.json")
+    image: Image @proxy(get: "/$image_id.json")
     interaction_type: InteractionType
     user_id: ID
-    user: User @proxy(get: "/profiles/:user_id.json")
+    user: User @proxy(get: "/profiles/$user_id.json")
     value: InteractionValue
 }
 
