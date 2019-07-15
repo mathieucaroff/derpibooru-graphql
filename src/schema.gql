@@ -1,11 +1,24 @@
+directive @from(
+    "Rename a REST result property"
+    prop: String
+    "REST calls"
+    get: String
+    delete: String
+    patch: String
+    post: String
+    put: String
+    "Specify a path to the property in the JSON result to use as field value"
+    root: String
+) on OBJECT | FIELD_DEFINITION
+
 type Query {
-    image(id: Int): Image @proxy(get: "/$id.json")
-    user(name: Int): User @proxy(get: "/profiles/$name.json")
+    image(id: Int): Image @from(get: "/$id.json")
+    user(name: Int): User @from(get: "/profiles/$name.json")
     search(
         query: String!
         sort: String!
         order: String!
-    ): SearchPage! @proxy(get: "/search?q=$query&sf=$sort&sd=$order")
+    ): SearchPage! @from(get: "/search?q=$query&sf=$sort&sd=$order")
 }
 
 type Image {
@@ -36,7 +49,7 @@ type Image {
     updated_at: String!
     uploader_id: Int
     uploader: String
-    uploader_info: User @proxy(get: "/profiles/$uploader.json")
+    uploader_info: User @from(get: "/profiles/$uploader.json")
     upvotes: Int!
     width: Int!
 }
@@ -44,10 +57,10 @@ type Image {
 type Interaction {
     id: Int
     image_id: Int
-    image: Image @proxy(get: "/$image_id.json")
+    image: Image @from(get: "/$image_id.json")
     interaction_type: String
     user_id: Int
-    user: User @proxy(get: "/profiles/$user_id.json")
+    user: User @from(get: "/profiles/$user_id.json")
     value: String
 }
 
