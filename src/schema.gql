@@ -12,86 +12,126 @@ directive @from(
 ) on OBJECT | FIELD_DEFINITION
 
 type Query {
-    image(id: Int): Image @from(get: "/$id.json")
-    user(name: Int): User @from(get: "/profiles/$name.json")
+    image(id: ID): Image @proxy(get: "/:id.json")
+    user(name: ID): User @proxy(get: "/profiles/:name.json")
     search(
         query: String!
-        sort: String!
-        order: String!
-    ): SearchPage! @from(get: "/search?q=$query&sf=$sort&sd=$order")
+        sort: SortFieldInput = created_at
+        order: SortOrderInput = desc
+    ): SearchPage! @proxy(get: "/search?q=:query&sf=:sort&sd=:sort_order")
+}
+
+scalar CommaSpaceSeparatedString
+scalar Date
+scalar Extension
+scalar Mime
+scalar Sha512
+scalar Url
+
+enum UserRole {
+    user
+}
+
+enum InteractionType {
+    voted
+    faved
+}
+
+enum InteractionValue {
+    up
+    down
+}
+
+enum SortFieldInput {
+    created_at
+    updated_at
+    first_seen_at
+    score
+    wilson
+    relevance
+    width
+    height
+    comments
+    tag_count
+    random
+}
+
+enum SortOrderInput {
+    asc
+    desc
 }
 
 type Image {
-    aspect_ratio: Int!
+    aspect_ratio: Float!
     comment_count: Int!
-    created_at: String!
+    created_at: Date!
     description: String
     downvotes: Int!
     faves: Int!
     file_name: String
-    first_seen_at: String
+    first_seen_at: Date
     height: Int!
-    id: Int!
-    image: String
-    interactions: [Interaction]
+    id: ID!
+    image: Url
+    interactions: [Interaction!]!
     is_optimized: Boolean!
     is_rendered: Boolean!
-    mime_type: String
-    orig_sha512_has: String
-    original_format: String
+    mime_type: Mime
+    orig_sha512_has: Sha512
+    original_format: Extension
     representations: Representations
     score: Int!
-    sha512_hash: String
-    source_url: String
+    sha512_hash: Sha512
+    source_url: Url
     spoilered: Boolean
-    tag_ids: [Int]
-    tags: String
-    updated_at: String!
+    tag_ids: [ID!]!
+    tags: CommaSpaceSeparatedString
+    updated_at: Date!
     uploader_id: Int
     uploader: String
-    uploader_info: User @from(get: "/profiles/$uploader.json")
+    uploader_info: User @proxy(get: "/profiles/:uploader.json")
     upvotes: Int!
     width: Int!
 }
 
 type Interaction {
-    id: Int
-    image_id: Int
-    image: Image @from(get: "/$image_id.json")
-    interaction_type: String
-    user_id: Int
-    user: User @from(get: "/profiles/$user_id.json")
-    value: String
+    id: ID
+    image_id: ID
+    image: Image @proxy(get: "/:image_id.json")
+    interaction_type: InteractionType
+    user_id: ID
+    user: User @proxy(get: "/profiles/:user_id.json")
+    value: InteractionValue
 }
 
 type Representations {
-    thumb_tiny: String
-    thumb_small: String
-    thumb: String
-    small: String
-    medium: String
-    large: String
-    tall: String
-    full: String
+    thumb_tiny: Url
+    thumb_small: Url
+    thumb: Url
+    small: Url
+    medium: Url
+    large: Url
+    tall: Url
+    full: Url
 }
 
 type SearchPage {
-    search: [Image]
+    search: [Image!]!
     total: Int!
-    interactions: [Interaction]
+    interactions: [Interaction!]!
 }
 
 type User {
-    avatar_url: String
-    awards: [String]
+    avatar_url: Url
+    awards: [String!]!
     comment_count: Int!
-    created_at: String!
+    created_at: Date!
     description: String
-    id: Int
-    links: [String]
+    id: ID
+    links: [String!]!
     name: String!
     post_count: Int!
-    role: String!
+    role: UserRole!
     slug: String!
     topic_count: Int!
     uploads_count: Int!
