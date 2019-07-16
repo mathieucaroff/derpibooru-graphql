@@ -9,7 +9,7 @@ directive @from(
     put: String
     "Specify a path to the property in the JSON result to use as field value"
     root: String
-) on OBJECT | FIELD_DEFINITION
+) on FIELD_DEFINITION
 
 type Query {
     image(id: ID): Image @proxy(get: "/:id.json")

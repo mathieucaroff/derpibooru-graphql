@@ -2,11 +2,14 @@
     "name": "sgq",
     "version": "1.0.0",
     "license": "MIT",
+    "main": "dist/src/main.js",
+    "types": "dist/index.d.js",
     "scripts": {
         "compile": "tsc",
         "compile:watch": "tsc --watch",
-        "serve": "node --inspect ./.build/src/index.js",
-        "serve:watch": "nodemon --inspect ./.build/src/index.js",
+        "prepublish": "tsc",
+        "serve": "node --inspect ./dist/src/main.js",
+        "serve:watch": "nodemon --inspect ./dist/src/main.js",
         "test": "jest --forceExit --detectOpenHandles --verbose",
         "test:coverage": "cross-env NODE_ENV=test jest --forceExit --coverage --verbose",
         "test:watch": "cross-env NODE_ENV=test jest --verbose --watch",
@@ -18,11 +21,15 @@
     },
     "dependencies": {
         "graphql": "^14.4.2",
-        "graphql-tag": "^2.10.1"
+        "graphql-tag": "^2.10.1",
+        "ono": "^5.0.1"
     },
     "devDependencies": {
+        "@types/graphql": "^14.2.2",
         "@types/jest": "^24.0.15",
         "@types/js-yaml": "^3.12.1",
+        "@types/node": "^12.6.2",
+        "@types/node-fetch": "^2.3.7",
         "@typescript-eslint/eslint-plugin": "^1.12.0",
         "@typescript-eslint/parser": "^1.12.0",
         "eslint": "^6.0.1",
@@ -30,6 +37,7 @@
         "eslint-plugin-prettier": "^3.1.0",
         "graphql-schema-linter": "^0.2.1",
         "jest": "^24.8.0",
+        "node-fetch": "^2.6.0",
         "nodemon": "^1.19.1",
         "npm-check-updates": "^3.1.18",
         "prettier": "^1.18.2",
