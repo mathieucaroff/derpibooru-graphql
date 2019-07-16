@@ -1,4 +1,7 @@
-directive @from(
+directive from(
+    "Config"
+    configBaseUrl: String
+    configQueryStringAdditions: [[String]]
     "Rename a REST result property"
     prop: String
     "REST calls"
@@ -9,9 +12,9 @@ directive @from(
     put: String
     "Specify a path to the property in the JSON result to use as field value"
     root: String
-) on FIELD_DEFINITION
+) on OBJECT | FIELD_DEFINITION
 
-type Query {
+type Query @from(configBaseUrl: "https://derpibooru.com/") {
     image(id: ID): Image @proxy(get: "/:id.json")
     user(name: ID): User @proxy(get: "/profiles/:name.json")
     search(

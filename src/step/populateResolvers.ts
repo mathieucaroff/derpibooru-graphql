@@ -1,14 +1,13 @@
 // Types
 import {
-    GraphQLSchema,
-    GraphQLField,
-    GraphQLResolveInfo,
-    GraphQLFieldResolver,
+    ArgumentNode,
     GraphQLDirective,
     GraphQLDirectiveConfig,
-    Kind,
-    ArgumentNode,
-    GraphQLType,
+    GraphQLField,
+    GraphQLFieldResolver,
+    GraphQLObjectType,
+    GraphQLResolveInfo,
+    GraphQLSchema,
 } from 'graphql'
 
 import { Fetch } from '../type'
@@ -60,37 +59,25 @@ class FromDirective {
     name: string
     args: Record<string, any>
     prop: FromDirectiveProp
+
     constructor(prop: FromDirectiveProp) {
         this.prop = prop
     }
-    extract(keyString: string) {
-        return extract(keyString.split(' '), this.args)
-    }
-    visitFieldDefinition = (
-        field: GraphQLField<any, any>,
-        parent: GraphQLType,
-    ) => {
+    anyNode() {
         // Config Parameters //
         let config = this.extractConfig()
         if (config) {
             this.config = config
         }
-
-        // Rest Parameters //
-        let restResolver: UResolver = this.resolverFromRestParameter(field)
-        let propertyResolver: UResolver = this.resolverFromPropertyParameter()
-
-        if (restResolver && propertyResolver) {
-            throw ono(
-                'Rest parameters supplied along with property parameter',
-                this.args,
-                field,
-            )
-        }
-
-        let resolver: UResolver = restResolver || propertyResolver
-        if (resolver) {
-            field.resolve = resolver
+    }
+    extract(keyString: string) {
+        return extract(keyString.split(' '), this.args)
+    }
+    extractConfig() {
+        let configPairList: Pair[] = this.extract('configUrlBase')
+        return {
+            ...Object['fromEntries'](configPairList),
+            ...(this.config || {}),
         }
     }
     resolverFromRestParameter(field) {
@@ -137,12 +124,34 @@ class FromDirective {
             return resolver
         }
     }
-    extractConfig() {
-        let configPairList: Pair[] = this.extract('configUrlBase')
-        return {
-            ...Object['fromEntries'](configPairList),
-            ...(this.config || {}),
+    visitFieldDefinition = (
+        field: GraphQLField<any, any>,
+        parent: GraphQLObjectType,
+    ): GraphQLField<any, any> => {
+        this.anyNode()
+
+        // Rest Parameters //
+        let restResolver: UResolver = this.resolverFromRestParameter(field)
+        let propertyResolver: UResolver = this.resolverFromPropertyParameter()
+
+        if (restResolver && propertyResolver) {
+            throw ono(
+                'Rest parameters supplied along with property parameter',
+                this.args,
+                field,
+            )
         }
+
+        let resolver: UResolver = restResolver || propertyResolver
+        if (resolver) {
+            field.resolve = resolver
+        }
+        let newField: GraphQLField<any, any> = { ...field }
+        return newField
+    }
+    visitObject = (object: GraphQLObjectType): GraphQLObjectType => {
+        this.anyNode()
+        return object
     }
 }
 
@@ -151,13 +160,10 @@ export const populateResolvers = (
     fetch: Fetch,
 ): GraphQLSchema => {
     let fromDirective = new FromDirective({ fetch })
-    let { visitFieldDefinition } = fromDirective
     return visit({
         schema,
         schemaDirectives: {
-            from: {
-                visitFieldDefinition,
-            },
+            from: fromDirective,
         },
     })
 }

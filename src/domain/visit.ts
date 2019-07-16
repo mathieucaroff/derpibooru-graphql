@@ -1,4 +1,4 @@
-import { GraphQLSchema, GraphQLObjectType, GraphQLField } from 'graphql'
+import { GraphQLSchema, GraphQLObjectType, GraphQLField, ASTVisitor } from 'graphql'
 
 export type DirectiveVisitorObject = {
     visitFieldDefinition?: (param: {
@@ -13,6 +13,8 @@ export type Visit = (param: {
         [x: string]: DirectiveVisitorObject
     }
 }) => GraphQLSchema
+
+let visitNode = (node: ASTVisitor, ca)
 
 export const visit: Visit = ({ schema, schemaDirectives }) => {
     return schema
