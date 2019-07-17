@@ -1,13 +1,13 @@
 import { ApolloServer } from 'apollo-server'
 import * as fetch from 'node-fetch'
 
-import { DerpibooruGraphql } from '../main'
-
-let derpibooruGraphql = new DerpibooruGraphql({ fetch })
-let PORT = process.env.PORT || 4000
+import { DerpibooruGraphql } from '../domain'
 
 let run = async () => {
-   let schema = await derpibooruGraphql.executableSchema
+   let derpibooruGraphql = new DerpibooruGraphql({ fetch })
+   let PORT = process.env.PORT || 4000
+
+   let { schema } = derpibooruGraphql
    let server = new ApolloServer({
       schema,
    })
