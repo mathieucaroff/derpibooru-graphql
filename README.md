@@ -4,15 +4,34 @@ Built on top of the Rest API
 
 ## Trying out the library
 
+These steps will allow you to run graphql in the GraphQL Playground.
+
+1. Clone the repository
+
 ```bash
 git clone ...
 cd ...
-yarn install
-yarn tsc
-yarn serve
 ```
 
-This will allow you to run graphql in the GraphQL Playground.
+2. Install dependencies
+
+With yarn:
+
+```bash
+yarn install
+yarn tsc
+yarn playground
+```
+
+With npm:
+
+```bash
+npm install
+npm run tsc
+npm run playground
+```
+
+3. Go to localhose:4000/playground
 
 ## Using the library in your project
 
@@ -20,29 +39,29 @@ This will allow you to run graphql in the GraphQL Playground.
 import * as DerpibooruGraphql from 'derpibooru-graphql'
 
 let {
-    gql,
-    query,
-    executableSchema,
-    schema,
-    schemaText,
-} = new DerpibooruGraphql()
+   gql,
+   query,
+   executableSchema,
+   schema,
+   schemaText,
+} = new DerpibooruGraphql({ fetch })
 
 // The recommanded way: use the gql tag //
 let variables = {}
 let result = await gql`
-    query {
-        search(query: "cute", per_page: 50) {
-            total
-            search {
-                faves
-                file_name
-                score
-                representations {
-                    full
-                }
+   query {
+      search(query: "cute", per_page: 50) {
+         total
+         search {
+            faves
+            file_name
+            score
+            representations {
+               full
             }
-        }
-    }
+         }
+      }
+   }
 `(varialbles)
 
 console.log(result)

@@ -8,8 +8,10 @@
         "compile": "tsc",
         "compile:watch": "tsc --watch",
         "prepublish": "tsc",
-        "serve": "node --inspect ./dist/src/main.js",
-        "serve:watch": "nodemon --inspect ./dist/src/main.js",
+        "serve": "node --inspect ./dist/src/dev/serve.js",
+        "serve:watch": "nodemon --inspect ./dist/src/serve.js",
+        "playground": "node --inspect ./dist/src/dev/playground.js",
+        "playground:watch": "nodemon --inspect ./dist/src/playground.js",
         "test": "jest --forceExit --detectOpenHandles --verbose",
         "test:coverage": "cross-env NODE_ENV=test jest --forceExit --coverage --verbose",
         "test:watch": "cross-env NODE_ENV=test jest --verbose --watch",
@@ -21,14 +23,14 @@
     },
     "dependencies": {
         "graphql": "^14.4.2",
-        "graphql-tag": "^2.10.1",
         "graphql-tools": "^4.0.5",
         "ono": "^5.0.1"
     },
     "peerDependencies": {
-      "node-fetch": "^2.6.0"
+        "node-fetch": "^2.6.0"
     },
     "devDependencies": {
+        "@types/express-graphql": "^0.8.0",
         "@types/graphql": "^14.2.2",
         "@types/jest": "^24.0.15",
         "@types/js-yaml": "^3.12.1",
@@ -36,9 +38,11 @@
         "@types/node-fetch": "^2.3.7",
         "@typescript-eslint/eslint-plugin": "^1.12.0",
         "@typescript-eslint/parser": "^1.12.0",
+        "apollo-server": "^2.7.0",
         "eslint": "^6.0.1",
         "eslint-config-prettier": "^6.0.0",
         "eslint-plugin-prettier": "^3.1.0",
+        "express": "^4.17.1",
         "graphql-schema-linter": "^0.2.1",
         "jest": "^24.8.0",
         "nodemon": "^1.19.1",
