@@ -10,6 +10,7 @@ export type DirectiveVisitorObject = {
       field: GraphQLField<any, any>
       parent: GraphQLObjectType
    }) => GraphQLField<any, any>
+   visitObject?: (param: { object: GraphQLObjectType }) => GraphQLObjectType
 }
 
 export type Visit = (param: {
