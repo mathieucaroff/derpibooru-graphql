@@ -1,8 +1,5 @@
 // Types
 import {
-   ArgumentNode,
-   GraphQLDirective,
-   GraphQLDirectiveConfig,
    GraphQLField,
    GraphQLFieldResolver,
    GraphQLObjectType,
@@ -20,8 +17,6 @@ import {
    makeExecutableSchema,
    ITypeDefinitions,
 } from 'graphql-tools'
-
-import { visit } from '../domain'
 
 import { entries } from '../util'
 
@@ -72,7 +67,7 @@ type FromDirectiveProp = {
 }
 
 let getFromDirective = (prop: FromDirectiveProp) => {
-   return class FromDirective extends SchemaDirectiveVisitor {
+   class FromDirective extends SchemaDirectiveVisitor {
       config: {
          configUrlBase: string
       }
@@ -158,9 +153,9 @@ let getFromDirective = (prop: FromDirectiveProp) => {
             return resolver
          }
       }
-      visitFieldDefinition = (
+      visitFieldDefinition(
          field: GraphQLField<any, any>,
-      ): GraphQLField<any, any> => {
+      ): GraphQLField<any, any> {
          this.anyNode()
 
          // Rest Parameters //
@@ -182,17 +177,15 @@ let getFromDirective = (prop: FromDirectiveProp) => {
          let newField: GraphQLField<any, any> = { ...field }
          return newField
       }
-      visitObject = (object: GraphQLObjectType): GraphQLObjectType => {
+      visitObject(object: GraphQLObjectType): GraphQLObjectType {
          this.anyNode()
          return object
       }
    }
+   return FromDirective
 }
 
-export const populateResolvers = (
-   typeDefs: ITypeDefinitions,
-   fetch: Fetch,
-): GraphQLSchema => {
+export const populateResolvers = (typeDefs: ITypeDefinitions, fetch: Fetch) => {
    let fromDirectiveClass = getFromDirective({ fetch })
    return makeExecutableSchema({
       typeDefs: typeDefs,
