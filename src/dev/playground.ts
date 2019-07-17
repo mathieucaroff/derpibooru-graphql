@@ -16,7 +16,6 @@ let run = async () => {
 
    console.log(
       `Serving the GraphQL Playground on? http://localhost:${PORT}/playground`,
-      `url: ${url}`,
    )
 }
 
