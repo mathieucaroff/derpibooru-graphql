@@ -35,16 +35,16 @@ npm run playground
 
 ## Using the library in your project
 
-```js
-import * as DerpibooruGraphql from 'derpibooru-graphql'
+Install with `npm install --save derpiboru-graphql node-fetch`
+or `yarn add derpiboru-graphql node-fetch`
 
-let {
-   gql,
-   query,
-   executableSchema,
-   schema,
-   schemaText,
-} = new DerpibooruGraphql({ fetch })
+Then use:
+
+```js
+import * as fetch from 'node-fetch'
+import { default as DerpibooruGraphql } from 'derpibooru-graphql'
+
+let { gql, query } = new DerpibooruGraphql({ fetch })
 
 // The recommanded way: use the gql tag //
 let variables = {}
@@ -85,10 +85,4 @@ query {
 `
 
 expect(await query(graphqlQueryText)).toEqual(result)
-
-import { graphql, buildSchema } from 'graphql'
-
-// If you have an already build GraphQL schema, use executableSchema //
-let graphqlQuery = buildSchema(graphqlQueryText)
-expect(await graphql(executableSchema, graphqlQuery)).toEqual(result)
 ```
