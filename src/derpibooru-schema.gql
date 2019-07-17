@@ -13,14 +13,17 @@ directive @from(
    "Specify a path to the property in the JSON result to use as field value"
    root: String
 ) on OBJECT | FIELD_DEFINITION
+
 type Query @from(configUrlBase: "https://derpibooru.org") {
    image(id: ID!): Image @from(get: "/:id.json")
    user(name: ID!): User @from(get: "/profiles/:name.json")
    search(
+      order: SortOrderInput = desc
+      page: Int! = 1
+      per_page: Int! = 15
       query: String!
       sort: SortFieldInput = created_at
-      order: SortOrderInput = desc
-   ): SearchPage! @from(get: "/search?q=:query&sf=:sort&sd=:sort_order")
+   ): SearchPage! @from(get: "/search.json?q=:query&sf=:sort&sd=:order")
 }
 
 scalar CommaSpaceSeparatedString
