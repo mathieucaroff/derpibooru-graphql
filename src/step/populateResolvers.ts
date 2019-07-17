@@ -4,12 +4,13 @@ import {
    GraphQLFieldResolver,
    GraphQLObjectType,
    GraphQLResolveInfo,
-   GraphQLSchema,
 } from 'graphql'
 
 import { Fetch } from '../type'
 
 // JS
+import * as url from 'url'
+
 import ono from 'ono'
 
 import {
@@ -18,7 +19,7 @@ import {
    ITypeDefinitions,
 } from 'graphql-tools'
 
-import { entries } from '../util'
+import { entries, fromEntries } from '../util'
 
 let extract = <T>(keyList: string[], obj: Record<any, T>): [string, T][] => {
    return entries(obj).filter(([key, value]) => {
@@ -26,24 +27,30 @@ let extract = <T>(keyList: string[], obj: Record<any, T>): [string, T][] => {
    })
 }
 
-type GetValue = (param: {
-   parent: Record<any, any>
-   args: Record<any, any>
-   context: any
-   info: GraphQLResolveInfo
-}) => string
+let concatSlash = (a, b) => {
+   let right = +(a.slice(-1) === '/')
+   let left = +(b[0] === '/')
+   return a + [`/${b}`, b, b.slice(1)][right + left]
+}
+
+type GetValue = (
+   parent: Record<any, any>,
+   args: Record<any, any>,
+   context: any,
+   info: GraphQLResolveInfo,
+) => string
 
 type GetGetValue = (param: {
    name: string
    field: GraphQLField<any, any>
 }) => GetValue
 
-let getGetValue: GetGetValue = ({ name, field }) => ({
+let getGetValue: GetGetValue = ({ name, field }) => (
    parent,
    args,
    context,
    info,
-}) => {
+) => {
    let value = args[name]
    if (value === undefined) {
       value = parent[name]
@@ -54,7 +61,10 @@ let getGetValue: GetGetValue = ({ name, field }) => ({
          { field, args, parent },
       )
    }
-   return ''
+   if (typeof value !== 'string' && typeof value !== 'number') {
+      throw ono(`unexpected type`, { name, value })
+   }
+   return `${value}`
 }
 
 type Pair = [string, string]
@@ -64,31 +74,28 @@ type UResolver = Resolver | undefined
 
 type FromDirectiveProp = {
    fetch: Fetch
+   config: {
+      configUrlBase?: string
+      configQueryStringAdditions: string[]
+   }
 }
 
 let getFromDirective = (prop: FromDirectiveProp) => {
    class FromDirective extends SchemaDirectiveVisitor {
-      config: {
-         configUrlBase: string
-      }
       name: string
       args: Record<string, any>
 
-      anyNode() {
-         // Config Parameters //
-         let config = this.extractConfig()
-         if (config) {
-            this.config = config
-         }
-      }
       extract(keyString: string) {
          return extract(keyString.split(' '), this.args)
       }
       extractConfig() {
-         let configPairList: Pair[] = this.extract('configUrlBase')
+         let configPairList: Pair[] = this.extract(
+            'configUrlBase configQueryStringAdditions',
+         )
+         let newConfig = fromEntries(configPairList)
          return {
-            ...Object['fromEntries'](configPairList),
-            ...(this.config || {}),
+            ...prop.config,
+            ...newConfig,
          }
       }
       getGetValue: GetGetValue = ({ name, field }) => ({
@@ -107,7 +114,7 @@ let getFromDirective = (prop: FromDirectiveProp) => {
                { field, args, parent },
             )
          }
-         return ''
+         return value
       }
       resolverFromRestParameter(field: GraphQLField<any, any>) {
          let restKeyList: Pair[] = this.extract('get delete patch post put')
@@ -132,12 +139,24 @@ let getFromDirective = (prop: FromDirectiveProp) => {
                }
             })
 
-            let resolver = (param) => {
+            let resolver: Resolver = async (s, a, c, i) => {
                let uri = uriTemplate
                replaceList.forEach(({ getValue, regex }) => {
-                  uri = uri.replace(regex, getValue(param))
+                  let value = getValue(s, a, c, i)
+                  uri = uri.replace(regex, value)
                })
-               return prop.fetch(uri, { method: method.toUpperCase() })
+               let concatUrl = concatSlash(prop.config.configUrlBase, uri)
+               let urlObj = new url.URL(concatUrl)
+               let qs = prop.config.configQueryStringAdditions
+               qs.forEach((param) => {
+                  let [key, value] = param.split('=')
+                  urlObj.searchParams.append(key, value)
+               })
+               let restResponse = await prop.fetch(urlObj.href, {
+                  method: method.toUpperCase(),
+               })
+               let result = await restResponse.json()
+               return result
             }
 
             return resolver
@@ -156,8 +175,6 @@ let getFromDirective = (prop: FromDirectiveProp) => {
       visitFieldDefinition(
          field: GraphQLField<any, any>,
       ): GraphQLField<any, any> {
-         this.anyNode()
-
          // Rest Parameters //
          let restResolver: UResolver = this.resolverFromRestParameter(field)
          let propertyResolver: UResolver = this.resolverFromPropertyParameter()
@@ -178,7 +195,11 @@ let getFromDirective = (prop: FromDirectiveProp) => {
          return newField
       }
       visitObject(object: GraphQLObjectType): GraphQLObjectType {
-         this.anyNode()
+         // Config Parameters //
+         let config = this.extractConfig()
+         if (config) {
+            prop.config = config
+         }
          return object
       }
    }
@@ -186,11 +207,22 @@ let getFromDirective = (prop: FromDirectiveProp) => {
 }
 
 export const populateResolvers = (typeDefs: ITypeDefinitions, fetch: Fetch) => {
-   let fromDirectiveClass = getFromDirective({ fetch })
-   return makeExecutableSchema({
+   let prop = {
+      fetch,
+      config: {
+         configUrlBase: undefined,
+         configQueryStringAdditions: [],
+      },
+   }
+   let fromDirectiveClass = getFromDirective(prop)
+   let schema = makeExecutableSchema({
       typeDefs: typeDefs,
       schemaDirectives: {
          from: fromDirectiveClass,
       },
    })
+   if (prop.config.configUrlBase === undefined) {
+      throw ono('No url base configured', prop.config)
+   }
+   return schema
 }

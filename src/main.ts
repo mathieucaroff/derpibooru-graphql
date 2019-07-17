@@ -1,3 +1,5 @@
 import { DerpibooruGraphql } from './domain'
 
-export default DerpibooruGraphql
+require('source-map-support').install()
+
+export { DerpibooruGraphql }

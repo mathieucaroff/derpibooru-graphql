@@ -1,5 +1,7 @@
-import * as express from 'express'
-import * as expressGraphql from 'express-graphql'
+import express from 'express'
+import expressGraphql from 'express-graphql'
+
+import fetch from 'node-fetch'
 
 import { DerpibooruGraphql } from '../main'
 
@@ -7,7 +9,7 @@ let derpibooruGraphql = new DerpibooruGraphql({ fetch })
 let PORT = process.env.PORT || 4000
 
 let run = async () => {
-   let schema = await derpibooruGraphql.executableSchema
+   let schema = await derpibooruGraphql.schema
 
    var app = express()
    app.use(

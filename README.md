@@ -27,7 +27,7 @@ With npm:
 
 ```bash
 npm install
-npm run tsc
+npm run compile
 npm run playground
 ```
 

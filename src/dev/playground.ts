@@ -1,7 +1,7 @@
 import { ApolloServer } from 'apollo-server'
 import * as fetch from 'node-fetch'
 
-import { DerpibooruGraphql } from '../domain'
+import { DerpibooruGraphql } from '../main'
 
 let run = async () => {
    let derpibooruGraphql = new DerpibooruGraphql({ fetch })

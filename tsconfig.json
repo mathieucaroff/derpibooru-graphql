@@ -1,5 +1,5 @@
 {
-    "include": ["src/types/**.ts", "src/**.ts"],
+    "include": ["src/types/**.ts", "src/**.ts", "src/dev/*.ts"],
     "exclude": ["src/types/**.test.ts", "src/**.test.ts"],
     "compilerOptions": {
         /* Basic Options */

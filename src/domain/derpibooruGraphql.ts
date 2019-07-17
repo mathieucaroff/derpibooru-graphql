@@ -36,17 +36,17 @@ class DerpibooruGraphql {
       this.prop = prop
    }
    get annotatedSchemaText() {
-      return cached(() => readFileSync(`${__dirname}/main.ts`, 'utf-8'))
+      return cached(() => readFileSync('src/derpibooru-schema.gql', 'utf-8'))
    }
    get annotatedSchema() {
       return cached(() => buildSchema(this.annotatedSchemaText))
    }
-   get strippedSchema() {
-      return cached(() => stripDirectives(this.annotatedSchema))
-   }
-   get strippedSchemaText() {
-      return cached(() => printSchema(this.schema))
-   }
+   // get strippedSchema() {
+   //    return cached(() => stripDirectives(this.annotatedSchema))
+   // }
+   // get strippedSchemaText() {
+   //    return cached(() => printSchema(this.schema))
+   // }
    get schema() {
       return cached(() => {
          let schema = this.annotatedSchemaText

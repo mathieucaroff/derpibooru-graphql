@@ -1,7 +1,7 @@
 directive @from(
    "Config"
-   configBaseUrl: String
-   configQueryStringAdditions: [[String]]
+   configUrlBase: String
+   configQueryStringAdditions: [String]
    "Rename a REST result property"
    prop: String
    "REST calls"
@@ -13,9 +13,9 @@ directive @from(
    "Specify a path to the property in the JSON result to use as field value"
    root: String
 ) on OBJECT | FIELD_DEFINITION
-type Query @from(configBaseUrl: "https://derpibooru.com/") {
-   image(id: ID): Image @from(get: "/:id.json")
-   user(name: ID): User @from(get: "/profiles/:name.json")
+type Query @from(configUrlBase: "https://derpibooru.org") {
+   image(id: ID!): Image @from(get: "/:id.json")
+   user(name: ID!): User @from(get: "/profiles/:name.json")
    search(
       query: String!
       sort: SortFieldInput = created_at
@@ -63,6 +63,18 @@ enum SortOrderInput {
    desc
 }
 
+enum LinkState {
+    verified
+}
+
+type Award {
+    awarded_on: Date!
+    id: ID!
+    image_url: Url!
+    label: String!
+    title: String!
+}
+
 type Image {
    aspect_ratio: Float!
    comment_count: Int!
@@ -106,15 +118,23 @@ type Interaction {
    value: InteractionValue
 }
 
+type Link {
+    created_at: Date!
+    state: LinkState!
+    tag_id: ID!
+    user_id: ID!
+    user_info: User! @from(get: "/profiles/:user_id.json")
+}
+
 type Representations {
-   thumb_tiny: Url
-   thumb_small: Url
-   thumb: Url
-   small: Url
-   medium: Url
-   large: Url
-   tall: Url
-   full: Url
+   thumb_tiny: Url!
+   thumb_small: Url!
+   thumb: Url!
+   small: Url!
+   medium: Url!
+   large: Url!
+   tall: Url!
+   full: Url!
 }
 
 type SearchPage {
@@ -125,12 +145,12 @@ type SearchPage {
 
 type User {
    avatar_url: Url
-   awards: [String!]!
+   awards: [Award!]!
    comment_count: Int!
    created_at: Date!
    description: String
    id: ID
-   links: [String!]!
+   links: [Link!]!
    name: String!
    post_count: Int!
    role: UserRole!
