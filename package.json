@@ -22,13 +22,17 @@
     "dependencies": {
         "graphql": "^14.4.2",
         "graphql-tag": "^2.10.1",
+        "graphql-tools": "^4.0.5",
         "ono": "^5.0.1"
+    },
+    "peerDependencies": {
+      "node-fetch": "^2.6.0"
     },
     "devDependencies": {
         "@types/graphql": "^14.2.2",
         "@types/jest": "^24.0.15",
         "@types/js-yaml": "^3.12.1",
-        "@types/node": "^12.6.2",
+        "@types/node": "^12.6.6",
         "@types/node-fetch": "^2.3.7",
         "@typescript-eslint/eslint-plugin": "^1.12.0",
         "@typescript-eslint/parser": "^1.12.0",
@@ -37,9 +41,8 @@
         "eslint-plugin-prettier": "^3.1.0",
         "graphql-schema-linter": "^0.2.1",
         "jest": "^24.8.0",
-        "node-fetch": "^2.6.0",
         "nodemon": "^1.19.1",
-        "npm-check-updates": "^3.1.18",
+        "npm-check-updates": "^3.1.20",
         "prettier": "^1.18.2",
         "source-map-support": "^0.5.12",
         "typescript": "^3.5.3",
