@@ -143,6 +143,31 @@ type SearchPage {
    interactions: [Interaction!]!
 }
 
+type TagQuery {
+    tag: Tag!
+    aliases: [String!]!
+    dnp_entries: [String]
+    images: [Image!]!
+    interactions: [Interaction!]!
+}
+
+type Tag {
+    id: ID!
+    name: String!
+    slug: String!
+    description: String!
+    short_description: String!
+    image_count: Int! @from(prop: "images")
+    spoiler_image_url: Boolean
+    aliased_to: String
+    aliased_to_id: ID
+    namespace: String
+    name_in_namespace: String!
+    implied_tags: [String!]!
+    implied_tag_ids: [ID!]!
+    category: String
+}
+
 type User {
    avatar_url: Url
    awards: [Award!]!
