@@ -23,7 +23,7 @@ type Query @from(configUrlBase: "https://derpibooru.org") {
       per_page: Int! = 15
       query: String!
       sort: SortFieldInput = created_at
-   ): SearchPage! @from(get: "/search.json?q=:query&sf=:sort&sd=:order")
+   ): SearchPage! @from(get: "/search.json?q=:query&sf=:sort&sd=:order&per_page=:per_page&page=:page")
 }
 
 scalar CommaSpaceSeparatedString
