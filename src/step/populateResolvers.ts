@@ -45,28 +45,6 @@ type GetGetValue = (param: {
    field: GraphQLField<any, any>
 }) => GetValue
 
-let getGetValue: GetGetValue = ({ name, field }) => (
-   parent,
-   args,
-   context,
-   info,
-) => {
-   let value = args[name]
-   if (value === undefined) {
-      value = parent[name]
-   }
-   if (value === undefined) {
-      throw ono(
-         `could not find "${name}" neither in args, nor in the parent JSON`,
-         { field, args, parent },
-      )
-   }
-   if (typeof value !== 'string' && typeof value !== 'number') {
-      throw ono(`unexpected type`, { name, value })
-   }
-   return `${value}`
-}
-
 type Pair = [string, string]
 
 type Resolver = GraphQLFieldResolver<Record<any, any>, any>
@@ -98,15 +76,15 @@ let getFromDirective = (prop: FromDirectiveProp) => {
             ...newConfig,
          }
       }
-      getGetValue: GetGetValue = ({ name, field }) => ({
+      getGetValue: GetGetValue = ({ name, field }) => (
          parent,
          args,
          context,
          info,
-      }) => {
+      ) => {
          let value = args[name]
          if (value === undefined) {
-            value = parent[name]
+            value = (parent || {})[name]
          }
          if (value === undefined) {
             throw ono(
@@ -114,7 +92,10 @@ let getFromDirective = (prop: FromDirectiveProp) => {
                { field, args, parent },
             )
          }
-         return value
+         if (typeof value !== 'string' && typeof value !== 'number') {
+            throw ono(`unexpected type`, { name, value })
+         }
+         return `${value}`
       }
       resolverFromRestParameter(field: GraphQLField<any, any>) {
          let restKeyList: Pair[] = this.extract('get delete patch post put')
@@ -130,7 +111,7 @@ let getFromDirective = (prop: FromDirectiveProp) => {
                if (part === ':') {
                   let name = partList[i + 1]
                   if (name !== undefined && name !== '') {
-                     let getValue = getGetValue({ name, field })
+                     let getValue = this.getGetValue({ name, field })
                      replaceList.push({
                         getValue,
                         regex: new RegExp(`:${name}\\b`, 'g'),
@@ -140,23 +121,32 @@ let getFromDirective = (prop: FromDirectiveProp) => {
             })
 
             let resolver: Resolver = async (s, a, c, i) => {
-               let uri = uriTemplate
-               replaceList.forEach(({ getValue, regex }) => {
-                  let value = getValue(s, a, c, i)
-                  uri = uri.replace(regex, value)
-               })
-               let concatUrl = concatSlash(prop.config.configUrlBase, uri)
-               let urlObj = new url.URL(concatUrl)
-               let qs = prop.config.configQueryStringAdditions
-               qs.forEach((param) => {
-                  let [key, value] = param.split('=')
-                  urlObj.searchParams.append(key, value)
-               })
-               let restResponse = await prop.fetch(urlObj.href, {
-                  method: method.toUpperCase(),
-               })
-               let result = await restResponse.json()
-               return result
+               try {
+                  let args = a
+                  if (args.length) {
+                     console.log({ args, thargs: this.args })
+                  }
+                  let uri = uriTemplate
+                  replaceList.forEach(({ getValue, regex }) => {
+                     let value = getValue(s, args, c, i)
+                     uri = uri.replace(regex, value)
+                  })
+                  let concatUrl = concatSlash(prop.config.configUrlBase, uri)
+                  let urlObj = new url.URL(concatUrl)
+                  let qs = prop.config.configQueryStringAdditions
+                  qs.forEach((param) => {
+                     let [key, value] = param.split('=')
+                     urlObj.searchParams.append(key, value)
+                  })
+                  let restResponse = await prop.fetch(urlObj.href, {
+                     method: method.toUpperCase(),
+                  })
+                  let result = await restResponse.json()
+                  return result
+               } catch (e) {
+                  console.error(e.stack)
+                  throw e
+               }
             }
 
             return resolver
