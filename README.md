@@ -31,9 +31,13 @@ npm run compile
 npm run playground
 ```
 
-3. Go to localhose:4000/playground
+3. Go to `localhost:4000/playground`
+
+4. Enjoy ^^
 
 ## Using the library in your project
+
+/!\ WIP /!\ Package not yet published
 
 Install with `npm install --save derpiboru-graphql node-fetch`
 or `yarn add derpiboru-graphql node-fetch`
@@ -42,7 +46,7 @@ Then use:
 
 ```js
 import * as fetch from 'node-fetch'
-import { default as DerpibooruGraphql } from 'derpibooru-graphql'
+import { DerpibooruGraphql } from 'derpibooru-graphql'
 
 let { gql, query } = new DerpibooruGraphql({ fetch })
 
