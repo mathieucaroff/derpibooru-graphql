@@ -86,7 +86,7 @@ type Image {
    first_seen_at: Date
    height: Int!
    id: ID!
-   image: Url
+   image_url: Url @from(prop: "image")
    interactions: [Interaction!]!
    is_optimized: Boolean!
    is_rendered: Boolean!
@@ -102,7 +102,7 @@ type Image {
    tags: CommaSpaceSeparatedString
    updated_at: Date!
    uploader_id: Int
-   uploader: String
+   uploader_name: String @from(prop: "uploader")
    uploader_info: User @from(get: "/profiles/:uploader.json")
    upvotes: Int!
    width: Int!
@@ -111,11 +111,11 @@ type Image {
 type Interaction {
    id: ID
    image_id: ID
-   image: Image @from(get: "/:image_id.json")
+   image_info: Image @from(get: "/:image_id.json")
    interaction_type: InteractionType
    user_id: ID
-   user: User @from(get: "/profiles/:user_id.json")
-   value: InteractionValue
+   user_info: User @from(get: "/profiles/:user_id.json")
+   interaction_value: InteractionValue @from(prop: "value")
 }
 
 type Link {
