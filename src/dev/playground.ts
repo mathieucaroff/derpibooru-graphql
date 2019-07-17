@@ -12,10 +12,10 @@ let run = async () => {
       schema,
    })
 
-   let { url } = await server.listen({ port: PORT })
+   await server.listen({ port: PORT })
 
    console.log(
-      `Serving the GraphQL Playground on? http://localhost:${PORT}/playground`,
+      `Serving the GraphQL Playground on http://localhost:${PORT}/playground`,
    )
 }
 
